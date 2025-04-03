@@ -12,6 +12,7 @@ import MobileMenu from "@/components/mobile-menu/Main";
 import MainColorSwitcher from "@/components/main-color-switcher/Main";
 import DarkModeSwitcher from "@/components/dark-mode-switcher/Main";
 import SideMenuTooltip from "@/components/side-menu-tooltip/Main";
+import ProtectedLayout from "../protected-layout";
 
 function Main() {
   const navigate = useNavigate();
@@ -187,7 +188,9 @@ function Main() {
         {/* END: Side Menu */}
         {/* BEGIN: Content */}
         <div className="content">
-          <Outlet />
+          <ProtectedLayout>
+            <Outlet />
+          </ProtectedLayout>
         </div>
         {/* END: Content */}
       </div>
