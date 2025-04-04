@@ -29,7 +29,6 @@ const AuthProvider = ({ children }) => {
       setUser(JSON.parse(userData));
     }
   };
-
   const fetchData = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_PUBLIC_AuthURL}/MA.asmx/getAC?_accountName=byc-deploy`);
@@ -84,7 +83,6 @@ const handleLogin = async (params, errorCallback) => {
       userType: getUS2.data.record.userType,
       employeeId: getUS2.data.record.employeeId,
       fullName: getUS2.data.record.fullName,
-      dashboardId: getUS2.data.record.dashboardId,
       role: 'admin',
       // expiresAt: jwt(signIn3.data.record.accessToken).exp,
       ...signIn3.data.record,
@@ -104,7 +102,7 @@ const EnableLogin = (loggedUser) => {
   navigate('/');
 };
 
-const handleLogout = async () => {
+const handleLogout = () => {
   setUser(null);
   localStorage.removeItem('userData');
   sessionStorage.removeItem('userData');
@@ -158,8 +156,8 @@ const getAccessToken = async () => {
     encryptePWD,
     getAccessToken,
     login: handleLogin,
-    logout: handleLogout,
-  };
+    logout: handleLogout
+    };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };

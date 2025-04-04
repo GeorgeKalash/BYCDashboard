@@ -2,10 +2,9 @@ import DarkModeSwitcher from "@/components/dark-mode-switcher/Main";
 import dom from "@left4code/tw-starter/dist/js/dom";
 import logoUrl from "@/assets/images/logo.svg";
 import illustrationUrl from "@/assets/images/illustration.svg";
-import { useEffect, useContext, useState } from "react";
+import { useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { AuthContext } from "../../contexts/AuthContext";
 import { useAuth } from "../../hooks/useAuth";
 import TextField from "../../component/customTextFiels";
 import Button from "../../component/customButton";
@@ -15,8 +14,6 @@ function Main() {
     dom("body").removeClass("main").removeClass("error-page").addClass("login");
   }, []);
 
-  const { encryptePWD } = useContext(AuthContext);
-  const [errorMessage, setErrorMessage] = useState(null);
   const auth = useAuth();
 
   const formik = useFormik({
@@ -29,20 +26,7 @@ function Main() {
       password: yup.string().min(5, "Password must be at least 5 characters").required("Password is required"),
     }),
     onSubmit: async (values) => {
-      try {
-        const loggedUser = await auth.login(values);
-
-        if (loggedUser?.getUS2?.umcpnl) {
-          const onClose = async () => {
-            await updateUmcpnl(loggedUser, loggedUser?.getUS2);
-          };
-          openForm(loggedUser.username, loggedUser, onClose);
-        } else if (loggedUser?.getUS2?.is2FAEnabled) {
-          viewOTP(loggedUser);
-        }
-      } catch (error) {
-        setErrorMessage(error.message || "Login failed. Please try again.");
-      }
+      await auth.login(values);
     },
   });
 
@@ -74,15 +58,12 @@ function Main() {
               <div className="intro-x mt-2 text-slate-400 xl:hidden text-center">
                 A few more clicks to sign in to your account.
               </div>
-
               <form onSubmit={formik.handleSubmit}>
                 <TextField label="Email" type="email" name="email" formik={formik} />
                 <TextField label="Password" type="password" name="password" formik={formik} />
                 <div className="intro-x mt-5 xl:mt-8 text-center xl:text-left">
                   <Button type="submit">Login</Button>
                 </div>
-
-                {errorMessage && <p className="text-red-500 text-center mt-3">{errorMessage}</p>}
               </form>
             </div>
           </div>

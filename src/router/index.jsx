@@ -885,7 +885,6 @@ function Router() {
     //     },
     //   ],
     // },
-    
     {
       path: "/",
       element : <AuthLayout />, 
